@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Homegrown AFH - About Us</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        serif: ['"Playfair Display"', 'Georgia', 'serif'],
+                        sans: ['"Inter"', 'system-ui', '-apple-system', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background-color: #fbfaf6;
+            color: #333333;
+            overflow-x: hidden;
+        }
+        /* Scroll Animation Classes */
+        .reveal { 
+            opacity: 0; 
+            transform: translateY(40px); 
+            transition: all 0.8s cubic-bezier(0.5, 0, 0, 1); 
+        }
+        .reveal.active { 
+            opacity: 1; 
+            transform: translateY(0); 
+        }
+        .delay-100 { transition-delay: 100ms; }
+        .delay-200 { transition-delay: 200ms; }
+        .delay-300 { transition-delay: 300ms; }
+        .delay-400 { transition-delay: 400ms; }
+
+        /* Navbar Transition */
+        #navbar {
+            transition: all 0.3s ease-in-out;
+        }
+        .nav-scrolled {
+            position: fixed;
+            top: 0;
+            background-color: #0b2b2d;
+            color: white !important;
+            padding-top: 0.75rem;
+            padding-bottom: 0.75rem;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        }
+        .nav-top {
+            position: absolute;
+            top: 0;
+            background-color: transparent;
+            color: #0e3b3e;
+            padding-top: 1rem;
+            padding-bottom: 1rem;
+        }
+
+        /* Hamburger button — mobile only */
+        #hamburger-btn {
+            display: flex;
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            padding: 8px;
+            color: inherit;
+        }
+        @media (min-width: 768px) {
+            #hamburger-btn { display: none; }
+            #desktop-cta  { display: flex; }
+        }
+        #desktop-cta { display: none; }
+
+        /* Premium full-screen mobile overlay */
+        #mobile-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #0b2b2d;
+            z-index: 9999;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 2.5rem;
+            animation: fadeOverlayIn 0.25s ease-out forwards;
+        }
+        #mobile-overlay.open { display: flex; }
+        @keyframes fadeOverlayIn {
+            from { opacity: 0; transform: translateY(-12px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+        #mobile-overlay a {
+            font-size: 1.5rem;
+            font-weight: 700;
+            font-family: 'Playfair Display', Georgia, serif;
+            color: rgba(255,255,255,0.85);
+            text-decoration: none;
+            transition: color 0.2s, opacity 0.2s;
+        }
+        #mobile-overlay a:hover,
+        #mobile-overlay a.active-link { color: #d6f866; opacity: 1; }
+        #mobile-close-btn {
+            position: absolute;
+            top: 1.25rem;
+            right: 1.25rem;
+            background: transparent;
+            border: none;
+            color: rgba(255,255,255,0.7);
+            cursor: pointer;
+            padding: 8px;
+            transition: color 0.2s;
+        }
+        #mobile-close-btn:hover { color: #fff; }
+        .overlay-divider {
+            width: 40px;
+            height: 2px;
+            background-color: #d6f866;
+            border-radius: 2px;
+            margin-bottom: 0.5rem;
+        }
+        .overlay-cta {
+            background-color: #d6f866;
+            color: #0e3b3e;
+            padding: 12px 32px;
+            border-radius: 9999px;
+            font-size: 1rem;
+            font-weight: 700;
+            text-decoration: none;
+            margin-top: 0.5rem;
+            transition: background-color 0.2s;
+        }
+        .overlay-cta:hover { background-color: #fff; color: #0e3b3e !important; }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col font-sans">
+
+    <!-- Navigation -->
+    <nav id="navbar" class="w-full z-50 px-6 flex justify-between items-center nav-top">
+        <!-- Brand -->
+        <a href="/" class="flex items-center gap-3 cursor-pointer text-inherit no-underline">
+            <div class="bg-white p-0.5 rounded-full w-12 h-12 flex items-center justify-center shadow-lg overflow-hidden border border-gray-100">
+                <img src="/images/logo.png" alt="Homegrown AFH Logo" class="w-full h-full object-cover rounded-full" />
+            </div>
+            <span class="font-serif text-xl font-bold tracking-wide">Homegrown AFH</span>
+        </a>
+
+        <!-- Desktop nav links (hidden on mobile) -->
+        <div id="nav-links" class="hidden md:flex gap-8 text-sm font-medium">
+            <a href="/" class="hover:text-[#d6f866] transition-colors">Home</a>
+            <a href="/about.html" class="text-[#d6f866] font-bold transition-colors">About Us</a>
+            <a href="/our-facility" class="hover:text-[#d6f866] transition-colors">Our Facility</a>
+            <a href="/care-services" class="hover:text-[#d6f866] transition-colors">Care Services</a>
+            <a href="/contact" class="hover:text-[#d6f866] transition-colors">Contact</a>
+        </div>
+
+        <!-- Desktop CTA button -->
+        <div id="desktop-cta" class="items-center gap-4">
+            <a href="/contact" class="bg-[#d6f866] text-[#0e3b3e] px-6 py-2 rounded-full text-sm font-bold hover:bg-white transition-colors shadow-lg" style="text-decoration:none;">
+                Contact Us
+            </a>
+        </div>
+
+        <!-- Hamburger button (mobile only) -->
+        <button id="hamburger-btn" onclick="openMobileMenu()" aria-label="Open navigation menu">
+            <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="3" y1="12" x2="21" y2="12"/>
+                <line x1="3" y1="6"  x2="21" y2="6" />
+                <line x1="3" y1="18" x2="21" y2="18"/>
+            </svg>
+        </button>
+    </nav>
+
+    <!-- Premium Full-Screen Mobile Nav Overlay -->
+    <div id="mobile-overlay" role="dialog" aria-modal="true" aria-label="Navigation menu">
+        <!-- Close button -->
+        <button id="mobile-close-btn" onclick="closeMobileMenu()" aria-label="Close navigation menu">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="18" y1="6"  x2="6"  y2="18"/>
+                <line x1="6"  y1="6"  x2="18" y2="18"/>
+            </svg>
+        </button>
+
+        <!-- Logo inside overlay -->
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:4px;">
+            <div style="background:#fff;border-radius:9999px;width:48px;height:48px;padding:2px;display:flex;align-items:center;justify-content:center;overflow:hidden;">
+                <img src="/images/logo.png" alt="Homegrown AFH Logo" style="width:100%;height:100%;object-fit:cover;border-radius:9999px;" />
+            </div>
+            <span style="font-family:'Playfair Display',Georgia,serif;font-size:1.25rem;font-weight:700;color:#fff;">Homegrown AFH</span>
+        </div>
+
+        <div class="overlay-divider"></div>
+
+        <a href="/" onclick="closeMobileMenu()">Home</a>
+        <a href="/about.html" class="active-link" onclick="closeMobileMenu()">About Us</a>
+        <a href="/our-facility" onclick="closeMobileMenu()">Our Facility</a>
+        <a href="/care-services" onclick="closeMobileMenu()">Care Services</a>
+        <a href="/contact" onclick="closeMobileMenu()">Contact</a>
+
+        <a href="/contact" class="overlay-cta" onclick="closeMobileMenu()">Contact Us</a>
+    </div>
+
+    <!-- Main Content Area -->
+    <main class="flex-grow pt-24 md:pt-32 pb-20">
+        
+        <!-- HERO SECTION -->
+        <section class="px-6 lg:px-12 max-w-7xl mx-auto relative mb-32">
+            
+            <!-- Dark Mission Box -->
+            <div class="bg-[#0e3b3e] text-white rounded-[3rem] pt-20 pb-48 px-6 text-center relative shadow-2xl reveal">
+                <!-- Squiggle SVGs -->
+                <svg viewBox="0 0 200 200" fill="none" class="absolute pointer-events-none w-64 h-64 top-10 left-10 opacity-50 hidden md:block" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M-20,150 C40,180 80,50 120,40 C160,30 180,80 220,100" stroke="#d6f866" stroke-width="3" stroke-linecap="round" />
+                </svg>
+                <svg viewBox="0 0 200 200" fill="none" class="absolute pointer-events-none w-64 h-64 bottom-20 right-10 opacity-50 hidden md:block rotate-180" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M-20,150 C40,180 80,50 120,40 C160,30 180,80 220,100" stroke="#d6f866" stroke-width="3" stroke-linecap="round" />
+                </svg>
+                
+                <h1 class="font-serif text-4xl md:text-5xl lg:text-6xl leading-[1.1] max-w-4xl mx-auto mb-10 font-light z-10 relative">
+                    Our mission is to provide high-quality, resident-centered care in a safe environment.
+                </h1>
+                
+                <div class="flex justify-center gap-4 relative z-10">
+                    <a href="/care-services" class="bg-[#d6f866] text-[#0e3b3e] px-8 py-3 rounded-full text-sm font-bold shadow-lg hover:bg-white transition-colors">
+                        Care Services
+                    </a>
+                </div>
+            </div>
+
+            <!-- Overlapping Image -->
+            <div class="flex justify-center -mt-32 relative z-20 reveal delay-100 px-4">
+                <div class="w-full max-w-[800px] h-[300px] md:h-[450px] overflow-hidden shadow-[0_20px_50px_rgba(14,59,62,0.3)]">
+                    <img 
+                        src="https://images.unsplash.com/photo-1576765608535-5f04d1e3f289?auto=format&fit=crop&w=1200&q=80" 
+                        alt="Caregiver interacting with resident" 
+                        class="w-full h-full object-cover"
+                    />
+                </div>
+            </div>
+
+            <!-- Stats Row -->
+            <div class="flex flex-wrap justify-center gap-16 md:gap-32 mt-16 max-w-4xl mx-auto text-center reveal delay-200">
+                <div>
+                    <h3 class="text-4xl md:text-5xl font-bold text-[#0e3b3e] mb-1 flex items-start justify-center">
+                        5<span class="text-[#d6f866] text-3xl font-black">+</span>
+                    </h3>
+                    <p class="text-gray-500 font-bold text-xs uppercase tracking-widest">Bedrooms</p>
+                </div>
+                <div>
+                    <h3 class="text-4xl md:text-5xl font-bold text-[#0e3b3e] mb-1 flex items-start justify-center">
+                        2<span class="text-[#d6f866] text-3xl font-black">+</span>
+                    </h3>
+                    <p class="text-gray-500 font-bold text-xs uppercase tracking-widest">Bathrooms</p>
+                </div>
+                <div>
+                    <h3 class="text-4xl md:text-5xl font-bold text-[#0e3b3e] mb-1 flex items-start justify-center">
+                        24<span class="text-[#d6f866] text-3xl font-black">/7</span>
+                    </h3>
+                    <p class="text-gray-500 font-bold text-xs uppercase tracking-widest">On-Site Care</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- STORY SECTION -->
+        <section class="py-24 px-6 lg:px-20 max-w-7xl mx-auto relative">
+            <div class="grid md:grid-cols-2 gap-16 items-center">
+
+                <!-- Left: WP8 image — full-bleed, premium rounded container, no borders -->
+                <div class="relative reveal">
+                    <div style="
+                        border-radius: 2rem;
+                        overflow: hidden;
+                        box-shadow: 0 20px 60px rgba(14, 59, 62, 0.18);
+                        height: clamp(320px, 45vw, 520px);
+                    ">
+                        <img
+                            src="/images/wp8.jpg"
+                            alt="Warm, person-centered care at Homegrown Adult Family Home"
+                            style="width: 100%; height: 100%; object-fit: cover; display: block;"
+                        />
+                    </div>
+                </div>
+
+                <!-- Right: About Us text -->
+                <div class="reveal delay-100">
+                    <h2 class="font-serif text-4xl lg:text-5xl text-[#0e3b3e] mb-8 leading-tight">
+                        About Us
+                    </h2>
+                    <div class="space-y-6 text-gray-600 text-lg leading-relaxed mb-10">
+                        <p>
+                            Homegrown Adult Family Home is owned and operated by individuals committed to providing high-quality, resident-centered care in a safe and supportive environment. 
+                        </p>
+                        <p>
+                            The owners ensure that the home operates in full compliance with all applicable state regulations and standards for adult family homes. Our staff consists of qualified and trained caregivers who meet state-required certifications and continuing education requirements.
+                        </p>
+                        <p>
+                            All staff members are carefully selected, background-checked, and trained to provide assistance with activities of daily living, medication support, and individualized care based on each resident's assessed needs.
+                        </p>
+                    </div>
+                    <a href="/our-facility" class="border border-[#0e3b3e] text-[#0e3b3e] px-8 py-3 rounded-full text-sm font-bold hover:bg-[#0e3b3e] hover:text-white transition-colors inline-flex items-center gap-3 w-fit">
+                        View Our Facility <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                    </a>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- VALUES SECTION -->
+        <section class="py-24 px-6 lg:px-20 max-w-7xl mx-auto border-t border-gray-200/60">
+            <div class="grid lg:grid-cols-12 gap-12 lg:gap-8 items-start">
+                
+                <div class="lg:col-span-5 reveal">
+                    <h2 class="font-serif text-4xl lg:text-5xl text-[#0e3b3e] mb-6 leading-tight">
+                        The values that drive everything we do
+                    </h2>
+                    <p class="text-gray-600 text-lg leading-relaxed mb-8">
+                        Our owners and staff are dedicated to a respectful, dignified, person-centered environment that supports each resident's independence, privacy, and quality of life.
+                    </p>
+                    <a href="/care-services" class="bg-[#0e3b3e] text-white px-8 py-3 rounded-full text-sm font-bold hover:bg-teal-800 transition-colors shadow-lg inline-block w-fit">
+                        Explore Care Services
+                    </a>
+                </div>
+
+                <div class="lg:col-span-7 grid sm:grid-cols-2 gap-6 relative">
+                    <!-- Left Column of Grid -->
+                    <div class="space-y-6 sm:mt-12">
+                        <div class="bg-white p-8 rounded-[2rem] shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-gray-100 reveal delay-100">
+                            <div class="bg-[#f4f7f4] w-14 h-14 rounded-2xl flex items-center justify-center mb-6">
+                                <i data-lucide="shield" class="w-7 h-7 text-[#0e3b3e]"></i>
+                            </div>
+                            <h3 class="font-bold text-xl text-[#0e3b3e] mb-3">Certified Staff</h3>
+                            <p class="text-gray-500 leading-relaxed text-sm">
+                                Our team includes qualified RNs and CNAs with additional certifications in Mental Health, Dementia, and CPR/First Aid.
+                            </p>
+                        </div>
+                        
+                        <div class="bg-white p-8 rounded-[2rem] shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-gray-100 reveal delay-200">
+                            <div class="bg-[#f4f7f4] w-14 h-14 rounded-2xl flex items-center justify-center mb-6">
+                                <i data-lucide="heart" class="w-7 h-7 text-[#0e3b3e]"></i>
+                            </div>
+                            <h3 class="font-bold text-xl text-[#0e3b3e] mb-3">Person-Centered</h3>
+                            <p class="text-gray-500 leading-relaxed text-sm">
+                                We tailor care to individual needs, from complex medical support (Hoyer Lifts, Insulin) to specialized diets and hobbies.
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Right Column of Grid -->
+                    <div class="space-y-6">
+                        <div class="bg-white p-8 rounded-[2rem] shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-gray-100 reveal delay-300">
+                            <div class="bg-[#f4f7f4] w-14 h-14 rounded-2xl flex items-center justify-center mb-6">
+                                <i data-lucide="clock" class="w-7 h-7 text-[#0e3b3e]"></i>
+                            </div>
+                            <h3 class="font-bold text-xl text-[#0e3b3e] mb-3">24/7 Availability</h3>
+                            <p class="text-gray-500 leading-relaxed text-sm">
+                                Caregivers and a provider live on-site, available 24 hours a day to ensure the safety, supervision, and well-being of all residents.
+                            </p>
+                        </div>
+
+                        <!-- Updated Nutritional Care Card -->
+                        <div class="bg-white p-8 rounded-[2rem] shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-gray-100 reveal delay-400">
+                            <div class="bg-[#f4f7f4] w-14 h-14 rounded-2xl flex items-center justify-center mb-6">
+                                <i data-lucide="utensils" class="w-7 h-7 text-[#0e3b3e]"></i>
+                            </div>
+                            <h3 class="font-bold text-xl text-[#0e3b3e] mb-3">Nutritional Excellence</h3>
+                            <p class="text-gray-500 leading-relaxed text-sm">
+                                We provide 3 daily meals made from scratch with fresh ingredients, easily accommodating Low Sodium, Gluten-Free, and Organic needs.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer Top Smooth Wave Divider -->
+    <div class="w-full overflow-hidden leading-none bg-[#fbfaf6]">
+        <svg viewBox="0 0 1440 48" preserveAspectRatio="none" class="w-full h-8 md:h-12 text-[#0b2b2d] fill-current translate-y-[1px]">
+            <path d="M0,48 C480,48 960,0 1440,0 L1440,48 L0,48 Z"></path>
+        </svg>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-[#0b2b2d] text-white pt-16 pb-10 px-6 lg:px-20">
+        <div class="max-w-7xl mx-auto">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-16 border-b border-teal-800/50 pb-12">
+                <div class="col-span-1 md:col-span-2">
+                    <div class="flex items-center gap-3 mb-6">
+                        <div class="bg-white p-0.5 rounded-full w-12 h-12 flex items-center justify-center overflow-hidden">
+                            <img src="/images/logo.png" alt="Homegrown AFH Logo" class="w-full h-full object-cover rounded-full" />
+                        </div>
+                        <span class="font-serif text-xl font-bold">Homegrown AFH</span>
+                    </div>
+                    <p class="text-teal-100/60 text-sm mb-6 leading-relaxed max-w-sm">
+                        Providing high-quality, resident-centered care in a safe and supportive environment.
+                    </p>
+                </div>
+                <div>
+                    <h4 class="font-bold mb-6 text-lg">Quick Links</h4>
+                    <ul class="space-y-3 text-teal-100/60 text-sm">
+                        <li><a href="/" class="hover:text-white transition-colors">Home</a></li>
+                        <li><a href="/about.html" class="hover:text-white transition-colors">About Us</a></li>
+                        <li><a href="/our-facility" class="hover:text-white transition-colors">Our Facility</a></li>
+                        <li><a href="/care-services" class="hover:text-white transition-colors">Care Services</a></li>
+                        <li><a href="/contact" class="hover:text-white transition-colors">Contact</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-bold mb-6 text-lg">Contact Us</h4>
+                    <ul class="space-y-4 text-teal-100/60 text-sm">
+                        <li class="flex items-start gap-3">
+                            <i data-lucide="phone" class="w-5 h-5 text-[#d6f866] flex-shrink-0"></i>
+                            <span>206-816-4268</span>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <i data-lucide="mail" class="w-5 h-5 text-[#d6f866] flex-shrink-0"></i>
+                            <span>Homegrownadultfamilyhome<br/>@gmail.com</span>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <i data-lucide="map-pin" class="w-5 h-5 text-[#d6f866] flex-shrink-0"></i>
+                            <span>18123 56th Ave W,<br/>Lynnwood, WA, 98037</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="text-center text-sm text-teal-100/40">
+                <p>&copy; 2026 Homegrown Adult Family Home. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts for animations and icons -->
+    <script>
+        // Initialize Icons
+        lucide.createIcons();
+
+        // ── Mobile Overlay open / close ──────────────────────────
+        const mobileOverlay = document.getElementById('mobile-overlay');
+
+        function openMobileMenu() {
+            mobileOverlay.classList.add('open');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeMobileMenu() {
+            mobileOverlay.classList.remove('open');
+            document.body.style.overflow = '';
+        }
+
+        // Close overlay when ESC is pressed
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') closeMobileMenu();
+        });
+
+        // ── Navbar Scroll Effect ─────────────────────────────────
+        const navbar = document.getElementById('navbar');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 50) {
+                navbar.classList.add('nav-scrolled');
+                navbar.classList.remove('nav-top');
+            } else {
+                navbar.classList.remove('nav-scrolled');
+                navbar.classList.add('nav-top');
+            }
+        });
+
+        // ── Reveal Animations on Scroll ──────────────────────────
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                }
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+    </script>
+</body>
+</html>
