@@ -26,7 +26,7 @@ export default function Header() {
   const getNavLinkClass = ({ isActive }) =>
     isActive ? 'nav-link font-bold text-secondary' : 'nav-link';
 
-  const isDarkText = !isScrolled && location.pathname !== '/';
+  const isDarkText = !isScrolled && location.pathname !== '/' && location.pathname !== '/contact';
 
   const close = () => setIsMobileMenuOpen(false);
 
