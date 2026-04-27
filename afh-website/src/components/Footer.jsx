@@ -4,10 +4,38 @@ import { Link } from 'react-router-dom';
 
 export default function Footer() {
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [formData, setFormData] = useState({ name: '', email: '', message: '' });
 
-  const handleContactSubmit = (e) => {
+  const handleChange = (e) => {
+    setFormData(prev => ({ ...prev, [e.target.name]: e.target.value }));
+  };
+
+  const handleContactSubmit = async (e) => {
     e.preventDefault();
+    setIsSubmitting(true);
+    try {
+      // Split name safely
+      const nameParts = formData.name.trim().split(' ');
+      const firstName = nameParts[0] || '';
+      const lastName = nameParts.length > 1 ? nameParts.slice(1).join(' ') : '';
+
+      await fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          firstName,
+          lastName,
+          email: formData.email,
+          message: formData.message
+        })
+      });
+    } catch (err) {
+      console.error("Footer form error:", err);
+    }
+    setIsSubmitting(false);
     setIsSubmitted(true);
+    setFormData({ name: '', email: '', message: '' });
     setTimeout(() => setIsSubmitted(false), 5000);
   };
 
@@ -49,12 +77,18 @@ export default function Footer() {
                 <div className="grid grid-cols-2 gap-16px">
                   <input 
                     type="text" 
+                    name="name"
+                    value={formData.name}
+                    onChange={handleChange}
                     required 
                     placeholder="Your Name" 
                     className="input-field"
                   />
                   <input 
                     type="email" 
+                    name="email"
+                    value={formData.email}
+                    onChange={handleChange}
                     required 
                     placeholder="Your Email Address" 
                     className="input-field"
@@ -62,14 +96,17 @@ export default function Footer() {
                 </div>
                 <textarea 
                   required 
+                  name="message"
+                  value={formData.message}
+                  onChange={handleChange}
                   placeholder="What questions do you have for us?" 
                   rows="3" 
                   className="input-field"
                   style={{ resize: 'none' }}
                 ></textarea>
                 <div className="flex justify-end" style={{ paddingTop: '8px' }}>
-                  <button type="submit" className="btn-primary">
-                    Send Message <ArrowRight width="16" height="16" />
+                  <button type="submit" disabled={isSubmitting} className="btn-primary" style={{ opacity: isSubmitting ? 0.7 : 1 }}>
+                    {isSubmitting ? 'Sending...' : 'Send Message'} {isSubmitting ? null : <ArrowRight width="16" height="16" />}
                   </button>
                 </div>
               </form>
