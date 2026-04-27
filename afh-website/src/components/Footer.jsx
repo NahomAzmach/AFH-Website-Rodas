@@ -111,7 +111,7 @@ export default function Footer() {
               </li>
               <li className="flex gap-8px">
                 <Mail width="20" height="20" className="flex-shrink-0" style={{ color: 'var(--color-secondary)' }} />
-                <span>Homegrownadultfamilyhome@gmail.com</span>
+                <span>homegrownafh@gmail.com</span>
               </li>
               <li className="flex gap-8px">
                 <MapPin width="20" height="20" className="flex-shrink-0" style={{ color: 'var(--color-secondary)' }} />

@@ -3,7 +3,8 @@ import { Phone, Mail, Clock, ArrowRight, CheckCircle, MapPin, Map as MapIcon } f
 
 export default function Contact() {
   const [isSubmitted, setIsSubmitted] = useState(false);
-
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [formData, setFormData] = useState({ firstName: '', lastName: '', email: '', message: '' });
   useEffect(() => {
     window.scrollTo(0, 0);
     const observer = new IntersectionObserver((entries) => {
@@ -17,13 +18,29 @@ export default function Contact() {
     return () => observer.disconnect();
   }, []);
 
-  const handleSubmit = (e) => {
+  const handleChange = (e) => {
+      setFormData(prev => ({ ...prev, [e.target.name]: e.target.value }));
+  };
+
+  const handleSubmit = async (e) => {
       e.preventDefault();
+      setIsSubmitting(true);
+      try {
+        await fetch('/api/contact', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(formData)
+        });
+      } catch (err) {
+        console.error("Failed to send msg:", err);
+      }
+      setIsSubmitting(false);
       setIsSubmitted(true);
   };
 
   const handleReset = () => {
       setIsSubmitted(false);
+      setFormData({ firstName: '', lastName: '', email: '', message: '' });
   };
 
   return (
@@ -264,7 +281,7 @@ export default function Contact() {
                               </div>
                               <div>
                                   <p className="text-xs text-gray-400 font-bold uppercase tracking-wider mb-1">Email Inquiry</p>
-                                  <p className="text-base font-bold text-[#0e3b3e] break-all">Homegrownadultfamilyhome<br/>@gmail.com</p>
+                                  <p className="text-base font-bold text-[#0e3b3e] break-all">homegrownafh@gmail.com</p>
                               </div>
                           </div>
 
@@ -300,26 +317,26 @@ export default function Contact() {
                                   <div className="grid md:grid-cols-2 gap-6">
                                       <div>
                                           <label className="block text-xs font-bold uppercase tracking-wider text-teal-100/70 mb-2 ml-1">First Name</label>
-                                          <input type="text" required placeholder="Jane" className="w-full premium-input text-white placeholder-teal-100/30 px-5 py-4 rounded-2xl" />
+                                          <input type="text" name="firstName" value={formData.firstName} onChange={handleChange} required placeholder="Jane" className="w-full premium-input text-white placeholder-teal-100/30 px-5 py-4 rounded-2xl" />
                                       </div>
                                       <div>
                                           <label className="block text-xs font-bold uppercase tracking-wider text-teal-100/70 mb-2 ml-1">Last Name</label>
-                                          <input type="text" required placeholder="Doe" className="w-full premium-input text-white placeholder-teal-100/30 px-5 py-4 rounded-2xl" />
+                                          <input type="text" name="lastName" value={formData.lastName} onChange={handleChange} required placeholder="Doe" className="w-full premium-input text-white placeholder-teal-100/30 px-5 py-4 rounded-2xl" />
                                       </div>
                                   </div>
                                   
                                   <div>
                                       <label className="block text-xs font-bold uppercase tracking-wider text-teal-100/70 mb-2 ml-1">Email Address</label>
-                                      <input type="email" required placeholder="jane@example.com" className="w-full premium-input text-white placeholder-teal-100/30 px-5 py-4 rounded-2xl" />
+                                      <input type="email" name="email" value={formData.email} onChange={handleChange} required placeholder="jane@example.com" className="w-full premium-input text-white placeholder-teal-100/30 px-5 py-4 rounded-2xl" />
                                   </div>
 
                                   <div>
                                       <label className="block text-xs font-bold uppercase tracking-wider text-teal-100/70 mb-2 ml-1">How can we help?</label>
-                                      <textarea required placeholder="Tell us a little about your loved one's needs or ask a question..." rows="4" className="w-full premium-input text-white placeholder-teal-100/30 px-5 py-4 rounded-2xl resize-none"></textarea>
+                                      <textarea required name="message" value={formData.message} onChange={handleChange} placeholder="Tell us a little about your loved one's needs or ask a question..." rows="4" className="w-full premium-input text-white placeholder-teal-100/30 px-5 py-4 rounded-2xl resize-none"></textarea>
                                   </div>
 
-                                  <button type="submit" className="bg-[#d6f866] text-[#0e3b3e] px-8 py-4 rounded-full text-base font-bold hover:bg-white hover:scale-[1.02] transition-all duration-300 w-full shadow-lg mt-4 flex justify-center items-center gap-3">
-                                      Send Secure Message <ArrowRight className="w-5 h-5" />
+                                  <button type="submit" disabled={isSubmitting} className="bg-[#d6f866] text-[#0e3b3e] px-8 py-4 rounded-full text-base font-bold hover:bg-white hover:scale-[1.02] transition-all duration-300 w-full shadow-lg mt-4 flex justify-center items-center gap-3 disabled:opacity-70 disabled:cursor-not-allowed">
+                                      {isSubmitting ? 'Sending...' : 'Send Secure Message'} {isSubmitting ? null : <ArrowRight className="w-5 h-5" />}
                                   </button>
                               </form>
                           </div>
