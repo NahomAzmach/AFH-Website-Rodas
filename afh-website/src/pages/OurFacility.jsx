@@ -118,7 +118,8 @@ export default function OurFacility() {
             <h3 className="font-serif font-bold text-primary flex items-start justify-center" style={{ fontSize: '3rem', marginBottom: '0.25rem' }}>
               5
             </h3>
-            <p className="font-bold text-xs tracking-widest uppercase" style={{ color: 'var(--color-text-muted)' }}>Private Bedrooms</p>
+            <p className="font-bold text-xs tracking-widest uppercase" style={{ color: 'var(--color-text-muted)' }}>Rooms (4 Private + 1 Shared)</p>
+            <p className="text-xs" style={{ color: 'var(--color-text-muted)', marginTop: '0.15rem' }}>shared room holds 2 patients</p>
           </div>
           <div>
             <h3 className="font-serif font-bold text-primary flex items-start justify-center" style={{ fontSize: '3rem', marginBottom: '0.25rem' }}>

@@ -238,7 +238,7 @@ export default function Home() {
               <div>
                 <h3 className="font-bold text-secondary" style={{ fontSize: '3.5rem', marginBottom: '8px', lineHeight: 1 }}>5</h3>
                 <p className="leading-snug" style={{ color: 'var(--color-text-teal-light)', fontSize: '14px' }}>
-                  Private Bedrooms<br/>for personalized care
+                  4 Private Rooms &amp; 1 Shared<br/>for personalized care
                 </p>
               </div>
               <div>
